@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("api/match")
+@RequestMapping("/api/match")
 public class MatchController {
 
     @Autowired
@@ -19,7 +20,8 @@ public class MatchController {
 
     @GetMapping("/{id}")
     public Match getMatchById(@PathVariable Long id) {
-        return matchRepo.findById(id).get();
+        Optional<Match> optionalMatch = matchRepo.findById(id);
+        return optionalMatch.isPresent()?optionalMatch.get():null;
     }
 
     @PostMapping("/addmatch")
