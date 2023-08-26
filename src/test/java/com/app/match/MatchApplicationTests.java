@@ -1,4 +1,4 @@
-package com.example.match;
+package com.app.match;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

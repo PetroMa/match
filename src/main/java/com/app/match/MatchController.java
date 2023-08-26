@@ -1,9 +1,11 @@
-package com.example.match;
+package com.app.match;
 
+import com.app.match.model.Match;
+import com.app.match.repositories.MatchOddsRepository;
+import com.app.match.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
