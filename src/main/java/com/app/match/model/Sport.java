@@ -1,4 +1,4 @@
-package com.example.match;
+package com.app.match.model;
 
 public enum Sport {
 

@@ -1,13 +1,9 @@
-package com.example.match;
-
-import org.h2.value.lob.LobDataFetchOnDemand;
+package com.app.match.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
