@@ -3,6 +3,7 @@ package com.example.match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,9 @@ public class MatchController {
 
     @Autowired
     private MatchRepository matchRepo;
+
+    @Autowired
+    private MatchOddsRepository oddsRepo;
 
     @GetMapping
     public List<Match> getAllMatches() {
@@ -24,10 +28,13 @@ public class MatchController {
         return optionalMatch.isPresent()?optionalMatch.get():null;
     }
 
-    @PostMapping("/addmatch")
+    @PostMapping("/add")
     public String addMatch(@RequestBody Match match) {
         try {
             matchRepo.save(match);
+            if (match.getMatchOdds()!= null) {
+              oddsRepo.saveAll(match.getMatchOdds());
+            }
             return String.format("Match saved: %s", match.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,14 +42,26 @@ public class MatchController {
         }
     }
 
-    @DeleteMapping("/deletematch/{id}")
+
+    @DeleteMapping("/delete/{id}")
     public String deleteMatch(@PathVariable Long id) {
         try {
             matchRepo.deleteById(id);
-             return String.format("Match with id %s deleted", id);
+            return String.format("Match with id %s deleted", id);
         } catch (Exception e) {
             e.printStackTrace();
             return String.format("Fail to delete match with id %s",id);
+        }
+    }
+
+    @DeleteMapping("/delete/odds/{id}")
+    public String deleteOdds(@PathVariable Long id) {
+        try {
+            oddsRepo.deleteById(id);
+            return String.format("Odds entity with id %s deleted", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return String.format("Fail to delete odds entity with id %s",id);
         }
     }
 
