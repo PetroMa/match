@@ -30,8 +30,7 @@ public class Match {
 
     private Sport sport;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MatchOdds> matchOdds = new ArrayList<>();
 
     public Long getId() {
@@ -96,8 +95,8 @@ public class Match {
 
     public void setMatchOdds(List<MatchOdds> matchOdds) {
         this.matchOdds = matchOdds;
+        matchOdds.forEach(matchOdd -> matchOdd.setMatch(this));
     }
-
     @Override
     public String toString() {
         return "Match{" +
