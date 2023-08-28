@@ -2,6 +2,8 @@ package com.app.match.controllers;
 
 import com.app.match.model.Match;
 import com.app.match.services.MatchService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +21,32 @@ public class MatchController {
 
 
     @GetMapping
+    @ApiOperation(value = "Get All Matches")
     public List<Match> getAllMatches() {
         return matchService.getAllMatches();
     }
 
     @GetMapping("/{id}")
-    public Optional<Match> getMatchById(@PathVariable Long id) {
+    @ApiOperation(value = "Get Match by id")
+    public Optional<Match> getMatchById(@ApiParam(value = "The match Id", required = true) @PathVariable Long id) {
         return matchService.getMatchOddsById(id);
     }
 
     @PostMapping("/add")
-    public String addMatch(@RequestBody Match match) {
+    @ApiOperation(value = "Add Match")
+    public String addMatch(@ApiParam(value = "The match to be added")@RequestBody Match match) {
         try {
             matchService.addMatch(match);
             return "Match saved successfully";
         } catch (Exception e) {
-            return e.getMessage();
+            return String.format("Cannot save match because of %s", e.getMessage());
         }
     }
 
 
     @DeleteMapping("/delete/{id}")
-    public String deleteMatch(@PathVariable Long id) {
+    @ApiOperation(value = "Delete Match by id")
+    public String deleteMatch(@ApiParam(value = "The match Id", required = true) @PathVariable Long id) {
         try {
             matchService.deleteMatch(id);
             return String.format("Match with id %s deleted", id);
@@ -51,7 +57,9 @@ public class MatchController {
     }
 
     @PutMapping("/update/{id}")
-    public String updateMatchTime(@PathVariable Long id,
+    @ApiOperation(value = "Update the time of the match with id")
+    public String updateMatchTime(@ApiParam(value = "The match Id", required = true)@PathVariable Long id,
+                                  @ApiParam(value = "Date time in ISO format YYYY-MM-DDThh:mm:ss", required = true)
                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime) {
         try {
             matchService.updateMatchDateAndTime(id, localDateTime);
