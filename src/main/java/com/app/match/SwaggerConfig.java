@@ -29,7 +29,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
                 .genericModelSubstitutes(ResponseEntity.class)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.app.match.controllers"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -46,11 +46,11 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
                 "API",
-                "API for xxxx",
-                "API TOS",
-                "Terms of service",
-                "xxx",
-                "License of API",
+                "API for handling a match and its odds",
+                "SNAPSHOT",
+                "Technical Assessment",
+                "",
+                "",
                 "");
         return apiInfo;
     }
