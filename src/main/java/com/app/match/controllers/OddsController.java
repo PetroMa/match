@@ -29,12 +29,19 @@ public class OddsController {
        return oddsService.getMatchOddsById(id);
     }
 
+    @GetMapping("/byMatch/{matchId}")
+    @ApiOperation(value = "Get Odds By Match Id")
+    public List<MatchOdds> getOddsByMatchId(@ApiParam(value = "The match Id", required = true) @PathVariable Long matchId) {
+        return oddsService.getOddsByMatch(matchId);
+    }
+
     @PostMapping("/add")
-    @ApiOperation(value = "Add Odds for Match with id")
+    @ApiOperation(value = "Add Odds for specifier of match with id")
     public String saveOdds(@ApiParam(value = "The Match Id", required = true) @RequestParam Long matchId,
-                           @ApiParam(value = "Single or multiple odds to add in match", required = true) @RequestParam List<Double> odds) {
+                           @ApiParam(value = "Odd specifier to add", required = true) @RequestParam String specifier,
+                           @ApiParam(value = "Odd value to add", required = true) @RequestParam Double odd) {
         try {
-            oddsService.addOdds(matchId, odds);
+            oddsService.addOdd(matchId, specifier, odd);
             return "Odds saved successfully";
         } catch (Exception e) {
             return String.format("Cannot saved odds because of %s", e.getMessage());
@@ -64,6 +71,21 @@ public class OddsController {
         } catch (Exception e) {
             e.printStackTrace();
             return String.format("Fail to update odd with id %s",id);
+        }
+    }
+
+    @PutMapping("/update")
+    @ApiOperation(value = "Update the odd value for specifier of match")
+    public String updateOddById(
+            @ApiParam(value = "The Match Id", required = true) @RequestParam Long matchId,
+            @ApiParam(value = "Odd specifier", required = true) @RequestParam String specifier,
+            @ApiParam(value = "The new odd value", required = true) @RequestParam Double odd) {
+        try {
+            oddsService.updateOddsByMatchIdAndSpecifier(matchId, specifier, odd);
+            return String.format("Odd for specifier %s with id %s updated", specifier, matchId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return String.format("Fail to update odd for specifier %s with id %s",specifier, matchId);
         }
     }
 
