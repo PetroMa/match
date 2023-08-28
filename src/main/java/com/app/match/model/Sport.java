@@ -3,7 +3,7 @@ package com.app.match.model;
 public enum Sport {
 
     FOOTBALL(1),
-    BASKETBALLL(2);
+    BASKETBALL(2);
 
     private int index;
 

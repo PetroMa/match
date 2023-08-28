@@ -34,7 +34,8 @@ public class MatchController {
 
     @PostMapping("/add")
     @ApiOperation(value = "Add Match")
-    public String addMatch(@ApiParam(value = "The match to be added")@RequestBody Match match) {
+    public String addMatch(@ApiParam(value = "The match to be added with odd specifiers or without. " +
+            "The specifiers must be unique.")@RequestBody Match match) {
         try {
             matchService.addMatch(match);
             return "Match saved successfully";

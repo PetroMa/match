@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "match_odds")
+@Table(name = "match_odds",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"specifier", "match_id"})})
 public class MatchOdds {
 
     @Id
@@ -13,6 +14,8 @@ public class MatchOdds {
     private Long id;
 
     private Double odd;
+
+    private String specifier;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "match_id", nullable = false)
@@ -32,6 +35,14 @@ public class MatchOdds {
 
     public void setOdd(Double odd) {
         this.odd = odd;
+    }
+
+    public String getSpecifier() {
+        return specifier;
+    }
+
+    public void setSpecifier(String specifier) {
+        this.specifier = specifier;
     }
 
     @JsonIgnore
@@ -54,11 +65,13 @@ public class MatchOdds {
     public String getSport() {
         return match.getSport().name();
     }
+
     @Override
     public String toString() {
         return "MatchOdds{" +
                 "id=" + id +
                 ", odd=" + odd +
+                ", specifier='" + specifier + '\'' +
                 ", match=" + match +
                 '}';
     }

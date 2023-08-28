@@ -35,20 +35,22 @@ public class OddsService {
         return oddsRepo.findById(oddId);
     }
 
-    public void addOdds(Long matchId, List<Double> odds) {
+    public List<MatchOdds> getOddsByMatch(Long matchId) {
+        return oddsRepo.findByMatch_id(matchId);
+    }
+
+    public void addOdd(Long matchId, String specifier, Double odd) {
         Optional<Match> optionalMatch = matchRepo.findById(matchId);
         if (!optionalMatch.isPresent()) {
             throw new DataNotFoundException(
                     String.format("Match with id %s does not exist", matchId)
             );
         }
-        List<MatchOdds> matchOdds = new ArrayList<>();
-        for (Double odd : odds) {
-            MatchOdds matchOdd = new MatchOdds();
-            matchOdd.setMatch(optionalMatch.get());
-            matchOdd.setOdd(odd);
-            oddsRepo.saveAndFlush(matchOdd);
-        }
+        MatchOdds matchOdd = new MatchOdds();
+        matchOdd.setMatch(optionalMatch.get());
+        matchOdd.setOdd(odd);
+        matchOdd.setSpecifier(specifier);
+        oddsRepo.saveAndFlush(matchOdd);
     }
 
     public void deleteOddById(Long oddId) {
@@ -61,9 +63,26 @@ public class OddsService {
 
     public void updateOddsById(Long id, Double odd) {
         Optional<MatchOdds> optionalMatchOdd = oddsRepo.findById(id);
-        if (!oddsRepo.existsById(id)) {
+        if (!optionalMatchOdd.isPresent()) {
             throw new DataNotFoundException(
                     String.format("Odd with id %s does not exist", id));
+        }
+        optionalMatchOdd.get().setOdd(odd);
+        oddsRepo.save(optionalMatchOdd.get());
+    }
+
+    public void updateOddsByMatchIdAndSpecifier(Long matchId, String specifier, Double odd) {
+        Optional<Match> optionalMatch = matchRepo.findById(matchId);
+        if (!optionalMatch.isPresent()) {
+            throw new DataNotFoundException(
+                    String.format("Match with id %s does not exist", matchId));
+        }
+
+        Optional<MatchOdds> optionalMatchOdd = oddsRepo.findByMatch_idAndSpecifier(matchId,specifier);
+
+        if (!optionalMatchOdd.isPresent()) {
+            throw new DataNotFoundException(
+                    String.format("Specifier %s for match with id %s does not exist", specifier, matchId));
         }
         optionalMatchOdd.get().setOdd(odd);
         oddsRepo.save(optionalMatchOdd.get());
