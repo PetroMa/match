@@ -32,7 +32,7 @@ public class MatchService {
             throw new DataNotFoundException(
                     String.format("Match with id %s does not exist", matchId));
         }
-        return matchRepo.findById(matchId);
+        return optionalMatch;
     }
 
     public void addMatch(Match match) {
